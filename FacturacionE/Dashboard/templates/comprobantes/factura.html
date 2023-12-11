@@ -1,0 +1,464 @@
+{% extends "base/index.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-12">
+    <h2 class="mb-3">Factura</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="media">
+                        <img src="{% static 'images/logos/logo2.png' %}" class="align-self-start mr-3" alt="..." style="width: 64px;">
+                        <div class="media-body">
+                            <h5 class="mt-0">Maxtdes SAC</h5>
+                            Juan de la Cierva N° 282 – Urb. Pay Pay – Trujillo – La Libertad (OFICINA CENTRAL)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <h6>R.U.C. N° 20601088143</h6>
+                    <h5>FACTURA ELECTRÓNICA</h5>
+                    <h6>{{codigo_final}}</h6>
+                </div>
+            </div>
+
+            <form method="post" class="border p-4 bg-white">
+                {% csrf_token %}
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h6>1. DATOS DEL CLIENTE</h6>
+                        <div class="form-check" style="text-align: left">
+                            <input class="form-check-input" type="checkbox" id="clienteRegistrado" name="clienteRegistrado" onclick="toggleClienteRegistrado()">
+                            <label class="form-check-label" for="clienteRegistrado">Cliente registrado?</label>
+                        </div>
+                        <hr class="hr" />
+                        <div id="clienteDetails">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="cliente">Cliente</label>
+                                    <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="direccion">Dirección</label>
+                                    <input type="text" class="form-control" id="direccion" name="direccion">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="ruc">RUC</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="ruc" name="ruc">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" id="btn-buscar-datos-por-ruc">
+                                                <!-- SVG del ícono de búsqueda de Feather -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="clienteDropdown" style="display: none;">
+                            <label for="clientesSelect">Selecciona un cliente</label>
+                            <select class="form-control" id="clientesSelect" name="cliente">
+                                <option value="">Seleccione un cliente</option>
+                                {% for cliente in clientes %}
+                                <option value="{{cliente.id}}">{{ cliente.razon_social }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h6>2. DATOS DEL COMPROBANTE</h6>
+                        <hr class="hr" />
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="fechaEmision">F. de Emisión</label>
+                                <input type="date" class="form-control" id="fechaEmision" name="fecha_emision">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="vencimiento">Vencimiento (Opcional)</label>
+                                <input type="date" class="form-control" id="vencimiento" name="fecha_vencimiento">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="moneda">Moneda</label>
+                                <select class="form-control" id="moneda" name="moneda">
+                                    <option value="S/">(S/) Sol</option>
+                                    <option value="$/.">($/.) Dólar EEUU</option>
+                                    <option value="€">(€) Euro</option>
+                                    <option value="ARS Peso Argentino">(ARS) Peso Argentino</option>
+                                    <option value="R$">(R$) Real</option>
+                                    <option value="CLP">(CLP) Peso Chileno</option>
+                                    <option value="COP">(COP) Peso Colombiano</option>
+                                    <option value="MXN">(MXN) Peso Mexiano</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="tipoVenta">Tipo de Venta</label>
+                                <select class="form-control" id="tipoVenta" name="tipo_venta">
+                                    <option value="Venta Interna (Productos / Servicios)">Venta Interna (Productos / Servicios)</option>
+                                    <option value="Venta Interna - Anticipos">Venta Interna - Anticipos</option>
+                                    <option value="Venta Interna - Itinerante">Venta Interna - Itinerante</option>
+                                    <option value="Venta Interna - Sujeta al IVAP">Venta Interna - Sujeta al IVAP</option>
+                                    <option value="Exportación de Servicios Realizados en el país">Exportación de Servicios Realizados en el país</option>
+                                    <option value="Exportación de servicios - Hospedaje">Exportación de servicios - Hospedaje</option>
+                                    <option value="Exportación de servicios - Servicios a naves y aeronaves de bandera extranjera">Exportación de servicios - Servicios a naves y aeronaves de bandera extranjera</option>
+                                    <option value="Exportación de servicios - Paquete turístico">Exportación de servicios - Paquete turístico</option>
+                                    <option value="Exportación de servicios - Servicios complementarios al transporte de carga">Exportación de servicios - Servicios complementarios al transporte de carga</option>
+                                    <option value="Exportación de servicios - Suministro de energía a favor de sujetos domiciliados en ZED">Exportación de servicios - Suministro de energía a favor de sujetos domiciliados en ZED</option>
+                                    <option value="Exportación de servicios - Realizados parcialmente en el extranjero">Exportación de servicios - Realizados parcialmente en el extranjero</option>
+                                    <option value="Operacion sujeta a Detracción">Operacion sujeta a Detracción</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Producto</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-outline-secondary btn-block" data-toggle="modal" data-target="#addItemModal">+ Agregar un item</button>
+                </div>
+
+                <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addItemModalLabel">Agregar un item</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="tipoAfectacion">Tipo de afectación</label>
+                                    <select class="form-control" id="tipoAfectacion">
+                                        <option>Gravado - Operación Onerosa</option>
+                                        <option>Gravado - Retiro por premio</option>
+                                        <option>Gravado - Retiro por donación</option>
+                                        <option>Gravado - Retiro</option>
+                                        <option>Gravado - Retiro por publicidad</option>
+                                        <option>Gravado - Bonificaciones</option>
+                                        <option>Gravado - Retiro por entrega a trabajadores</option>
+                                        <option>Exonerado</option>
+                                        <option>Exonerado - Transferencia gratuita</option>
+                                        <option>Inafecto - Operacion Onerosa</option>
+                                        <option>Inafecto - Retiro por bonificación</option>
+                                        <option>Inafecto - Retiro</option>
+                                        <option>Inafecto - Retiro por muestras médicas</option>
+                                        <option>Inafecto - Retiro por convenio colectivo</option>
+                                        <option>Inafecto - Retiro por premio</option>
+                                        <option>Inafecto - Retiro por publicidad</option>
+                                        <option>Expropiacion</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="producto">Producto</label>
+                                    <select class="form-control" id="productosSelect" name="producto">
+                                        <option value="">Seleccione un producto</option>
+                                        {% for producto in productos %}
+                                        <option value="{{producto.id}}">{{ producto.descripcion }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cantidad">Cantidad</label>
+                                    <input type="number" class="form-control" id="cantidad" min="1" name="cantidad">
+                                </div>
+                                <div class="form-group">
+                                    <label for="descuento">Descuento (opcional)</label>
+                                    <input type="number" class="form-control" id="descuento" min="1" name="descuento" placeholder="Opcional">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="importe_en_letras" id="hiddenImporteEnLetras">
+                <!-- Importe en letras y opciones finales -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>IMPORTE EN LETRAS</h6>
+                        <p id="importeEnLetras">CERO CON 00/100</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>IMPORTE TOTAL</h6>
+                        <p id="importeTotal">S/. 0</p>
+                    </div>
+                </div>
+
+                <!-- Sección de modo de envío -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h6>SELECCIONA EL MODO DE ENVÍO:</h6>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="modoEnvio" id="enviarSunat" value="enviarSunat" checked>
+                            <label class="form-check-label" for="enviarSunat">
+                                Enviar a SUNAT ahora mismo
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="modoEnvio" id="firmarDigitalmente" value="firmarDigitalmente">
+                            <label class="form-check-label" for="firmarDigitalmente">
+                                Solo Firmar digitalmente
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="modoEnvio" id="guardarVenta" value="guardarVenta">
+                            <label class="form-check-label" for="guardarVenta">
+                                Solo Guardar la Venta
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón de emitir factura -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <button class="btn btn-primary btn-block">Emitir factura</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+
+    function toggleClienteRegistrado() {
+        const clienteRegistrado = document.getElementById('clienteRegistrado').checked;
+        const clienteDetails = document.getElementById('clienteDetails');
+        const clienteDropdown = document.getElementById('clienteDropdown');
+
+        if (clienteRegistrado) {
+            clienteDetails.style.display = 'none';
+            clienteDropdown.style.display = 'block';
+        } else {
+            clienteDetails.style.display = 'block';
+            clienteDropdown.style.display = 'none';
+        }
+    }
+    let productos = [];
+
+    document.querySelector('.btn-primary').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const productoId = document.querySelector('#productosSelect').value;
+        const productoSelect = document.querySelector('#productosSelect');
+        const productoNombre = productoSelect.options[productoSelect.selectedIndex].textContent;
+        const cantidad = document.querySelector('#cantidad').value;
+
+        if (productoId && cantidad) {
+            getPrecio(productoId, function(precio) {
+                const tbody = document.querySelector('table tbody');
+
+                // Crear una nueva fila
+                const newRow = document.createElement('tr');
+
+                // Crear las columnas
+                const productColumn = document.createElement('td');
+                productColumn.textContent = productoNombre;
+
+                const qtyColumn = document.createElement('td');
+                qtyColumn.textContent = cantidad;
+                qtyColumn.classList.add('cantidad');  // Agrega esta línea
+
+                const priceColumn = document.createElement('td');
+                priceColumn.textContent = precio;
+                priceColumn.classList.add('precio');  // Agrega esta línea
+
+                const actionColumn = document.createElement('td');
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Eliminar';
+                deleteButton.classList.add('btn', 'btn-danger');
+                deleteButton.addEventListener('click', function() {
+                    tbody.removeChild(newRow);
+                });
+                actionColumn.appendChild(deleteButton);
+
+                // Agregar campos ocultos para enviar al servidor
+                const productInput = document.createElement('input');
+                productInput.type = 'hidden';
+                productInput.name = 'producto';
+                productInput.value = productoId;
+
+                const qtyInput = document.createElement('input');
+                qtyInput.type = 'hidden';
+                qtyInput.name = 'cantidad';
+                qtyInput.value = cantidad;
+
+                newRow.appendChild(productInput);
+                newRow.appendChild(qtyInput);
+
+                // Agregar las columnas a la fila
+                newRow.appendChild(productColumn);
+                newRow.appendChild(qtyColumn);
+                newRow.appendChild(priceColumn);
+                newRow.appendChild(actionColumn);
+
+                // Agregar la fila a la tabla
+                tbody.appendChild(newRow);
+
+                // Actualizar Importe Letras (si se requiere)
+                actualizarImporteLetras();
+            });
+        }
+    });
+
+    function getPrecio(producto_id, callback) {
+        if (producto_id) {
+            $.ajax({
+                url: '/get_precio_producto/',
+                data: {
+                    'producto_id': producto_id
+                },
+                dataType: 'json',
+                success: function(data) {
+                    var precio = data.precio;
+                    callback(precio);
+                }
+            });
+        } else {
+            callback("0.00");
+        }
+    }
+
+    function actualizarImporteLetras() {
+        const importe = calcularImporteTotal();
+        const importeEnLetras = convertirANumerosEnLetras(importe);  // Si tienes una función así
+
+        $("#importeTotal").text("S/. " + importe);
+        $("#importeEnLetras").text(importeEnLetras);
+        $("#hiddenImporteEnLetras").val(importeEnLetras);
+    }
+
+    function calcularImporteTotal() {
+        let importeTotal = 0;
+        const productos = Array.from(document.querySelectorAll('table tbody tr'));
+
+        productos.forEach(producto => {
+            const precio = parseFloat(producto.querySelector('.precio').textContent);
+            const cantidad = parseFloat(producto.querySelector('.cantidad').textContent);
+            importeTotal += precio * cantidad;
+        });
+
+        return importeTotal.toFixed(2);
+    }
+
+    function convertirANumerosEnLetras(importe) {
+        const UNIDADES = [
+            '', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE'
+        ];
+        const DECENAS = [
+            '', 'DIEZ', 'VEINTE', 'TREINTA', 'CUARENTA', 'CINCUENTA', 'SESENTA', 'SETENTA', 'OCHENTA', 'NOVENTA'
+        ];
+        const CENTENAS = [
+            '', 'CIEN', 'DOSCIENTOS', 'TRESCIENTOS', 'CUATROCIENTOS', 'QUINIENTOS', 'SEISCIENTOS', 'SETECIENTOS', 'OCHOCIENTOS', 'NOVECIENTOS'
+        ];
+
+        function convertirCientos(numero) {
+            if (numero === 100) {
+                return 'CIEN';
+            } else if (numero < 200) {
+                return 'CIENTO ' + convertirDecenas(numero % 100);
+            } else {
+                const centenas = Math.floor(numero / 100);
+                const decenasYUnidades = numero % 100;
+                return CENTENAS[centenas] + (decenasYUnidades ? ' ' + convertirDecenas(decenasYUnidades) : '');
+            }
+        }
+
+        function convertirDecenas(numero) {
+            if (numero < 10) {
+                return UNIDADES[numero];
+            } else if (numero < 30) {
+                const especiales = ['DIEZ', 'ONCE', 'DOCE', 'TRECE', 'CATORCE', 'QUINCE'];
+                return numero < 16 ? especiales[numero-10] : DECENAS[Math.floor(numero / 10)] + ' Y ' + UNIDADES[numero % 10];
+            } else {
+                const decenas = Math.floor(numero / 10);
+                const unidades = numero % 10;
+                return DECENAS[decenas] + (unidades ? ' Y ' + UNIDADES[unidades] : '');
+            }
+        }
+
+        const entero = Math.floor(importe);
+        const decimal = Math.round((importe - entero) * 100);
+
+        let letras = '';
+        if (entero > 999) {
+            letras = convertirCientos(Math.floor(entero / 1000)) + ' MIL ';
+            if (entero % 1000) {
+                letras += convertirCientos(entero % 1000);
+            }
+        } else {
+            letras = convertirCientos(entero);
+        }
+
+        if (decimal > 0) {
+            letras += ' CON ' + convertirDecenas(decimal);
+        }
+
+        return letras;
+    }
+
+    function agregarProductosAlFormulario() {
+        productos.forEach((producto, index) => {
+            const inputProducto = document.createElement('input');
+            inputProducto.type = 'hidden';
+            inputProducto.name = `producto_${index}`;
+            inputProducto.value = JSON.stringify(producto);
+            document.querySelector('form').appendChild(inputProducto);
+        });
+    }
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        agregarProductosAlFormulario();
+    });
+
+    $('#btn-buscar-datos-por-ruc').on('click', function(e) {
+        e.preventDefault();
+
+        var ruc = $('#ruc').val().trim();
+
+        // Validar que el RUC no esté vacío y tenga un formato adecuado
+        if (!ruc || ruc.length !== 11) { // Ajusta la validación según las reglas de RUC
+            alert("Por favor, ingrese un RUC válido.");
+            return;
+        }
+
+        $.get('/get_datos_por_ruc/', {ruc: ruc})
+        .done(function(data) {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                // Rellenamos los campos con los datos recibidos del view
+                $('#nombre_cliente').val(data.nombre);
+                $('#direccion').val(data.domicilio_fiscal);
+            }
+        })
+        .fail(function() {
+            alert("Ocurrió un error al obtener los datos. Por favor, intente nuevamente.");
+        })
+        .always(function() {
+            $feedback.remove(); // Elimina el feedback visual cuando la solicitud se complete
+        });
+    });
+</script>
+{% endblock %}

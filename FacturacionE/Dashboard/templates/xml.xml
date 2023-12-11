@@ -1,0 +1,29 @@
+<<?xml version="1.0" encoding="UTF-8"?>
+<factura>
+    <empresa>
+        <nombre>Maxtdes SAC</nombre>
+        <direccion>Juan de la Cierva N° 282 – Urb. Pay Pay – Trujillo – La Libertad (OFICINA CENTRAL)</direccion>
+        <ruc>20601088143</ruc>
+    </empresa>
+    <codigoFactura>{{ factura.codigo }}</codigoFactura>
+    <datosCliente>
+        <cliente>{{ cliente.razon_social }}</cliente>
+        <direccion>{{ cliente.direccion }}</direccion>
+        <numeroDocumento>{{ cliente.numero_documento }}</numeroDocumento>
+    </datosCliente>
+    <datosComprobante>
+        <fechaEmision>{{ factura.fecha_emision }}</fechaEmision>
+        <fechaVencimiento>{{ factura.fecha_vencimiento }}</fechaVencimiento>
+        <moneda>{{ factura.moneda }}</moneda>
+        <tipoVenta>{{ factura.tipo_venta }}</tipoVenta>
+    </datosComprobante>
+    <detallesFactura>
+        {% for detalle in detalles %}
+        <detalle>
+            <producto>{{ detalle.producto.descripcion }}</producto>
+            <cantidad>{{ detalle.cantidad }}</cantidad>
+            <precio>{{ detalle.precio_unitario }}</precio>
+        </detalle>
+        {% endfor %}
+    </detallesFactura>
+</factura>

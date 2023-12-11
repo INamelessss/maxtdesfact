@@ -1,0 +1,197 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container mt-12">
+    <div class="card">
+        <div class="card-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item">Clientes</li>
+                    <li class="breadcrumb-item active" aria-current="page">Nuevo</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between mb-3">
+                <h2>Nuevo</h2>
+            </div>
+
+            <!-- Formulario de entrada -->
+            <form method="POST">
+                {% csrf_token %}
+                <!-- Tipo de documento de identidad -->
+                <div class="form-group">
+                    <label for="tipoDocumento">Tipo de documento de identidad</label>
+                    <select class="form-control" id="tipoDocumento" name="tipoDocumento">
+                        <option>Sin documento</option>
+                        <option>DNI</option>
+                        <option>Carnet de extranjería</option>
+                        <option>RUC</option>
+                        <option>Pasaporte</option>
+                        <option>Cedula diplomática</option>
+                        <option>TIN - Tax Identification Number</option>
+                        <option>IN - Identification Number</option>
+                        <option>TAM - Tarjeta Andina de Migración</option>
+                    </select>
+                </div>
+
+                <!-- Número de documento de identidad -->
+                <div class="form-group">
+                    <label for="numDocumento">Número de documento</label>
+                    <input type="text" class="form-control" id="numDocumento" placeholder="Número de documento de identidad" name="numDocumento">
+                </div>
+
+                <!-- Razón social / Nombre completo -->
+                <div class="form-group">
+                    <label for="nombreCompleto">Razón social/Nombre Completo</label>
+                    <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto">
+                </div>
+
+                <!-- Email, Teléfono, Celular -->
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="inputEmail">Email</label>
+                        <input type="email" class="form-control" id="inputEmail" name="inputEmail">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputTelefono">Teléfono</label>
+                        <input type="text" class="form-control" id="inputTelefono" name="inputTelefono">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputCelular">Celular</label>
+                        <input type="text" class="form-control" id="inputCelular" name="inputCelular">
+                    </div>
+                </div>
+
+                <!-- Dirección -->
+                <div class="form-group">
+                    <label for="inputDireccion">Dirección</label>
+                    <input type="text" class="form-control" id="inputDireccion" placeholder="Ingrese la dirección del cliente" name="inputDireccion">
+                </div>
+
+                <!-- Buscar departamento, provincia, distrito -->
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="exampleFormControlSelect1">Buscar departamento</label>
+                        <select class="form-control custom-select" id="ubigeo_dep" name="ubigeo_dep">
+                            <!-- Las opciones se cargarán dinámicamente -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="exampleFormControlSelect1">Buscar provincia</label>
+                        <select class="form-control custom-select" id="ubigeo_pro" name="ubigeo_pro">
+                            <!-- Las opciones se cargarán dinámicamente -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="exampleFormControlSelect1">Buscar distrito</label>
+                        <select class="form-control custom-select" id="ubigeo_dis" name="ubigeo_dis">
+                            <!-- Las opciones se cargarán dinámicamente -->
+                        </select>
+                    </div>
+                </div>
+                <!-- N° cuenta detracción -->
+                <div class="form-group">
+                    <label for="cuentaDetraccion">N° cuenta detracción</label>
+                    <input type="text" class="form-control" id="cuenta_detraccion" name="cuenta_detraccion">
+                </div>
+
+                <!-- Detalles adicionales -->
+                <div class="form-group">
+                    <label for="detallesAdicionales">Detalles Adicionales</label>
+                    <textarea class="form-control" id="detallesAdicionales" rows="4" name="detallesAdicionales"></textarea>
+                </div>
+
+                <!-- Botón Guardar -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+
+        //listar departamentos
+        var select01 = '';
+        $.each(departamentos, function(i, obj) {
+            select01 = '<option value="'+ departamentos[i].coddepartamento + '">' + departamentos[i].departamento + '</option>';
+            $('#ubigeo_dep').append(select01);
+        });
+
+        //listar provincias por departamento
+        $('#ubigeo_dep').on('change', function() {
+
+            //limpiar los selects
+            $('#ubigeo_pro').find('option').remove();
+            $('#ubigeo_dis').find('option').remove();
+
+            var iddep = this.value;
+            var select02 = '';
+
+            var provincias_result = jQuery.grep(provincias, function (obj) {
+                return obj[iddep];
+            });
+
+            //console.log( JSON.stringify(provincias_result, null, '\t') );
+            //console.log( JSON.stringify(provincias_result[0][iddep], null, '\t') );
+
+            var provincias_result_array = provincias_result[0][iddep];
+
+            $.each(provincias_result_array, function(i, obj) {
+                select02 = '<option value="'+ provincias_result_array[i].codprovincia + '">' + provincias_result_array[i].provincia + '</option>';
+                $('#ubigeo_pro').append(select02);
+            });
+
+            //cargar los distritos
+            $('#ubigeo_pro').trigger('change');
+
+        });
+
+        //listar distritos por provincia
+        $('#ubigeo_pro').on('change', function() {
+
+            //limpiar el select de distritos
+            $('#ubigeo_dis').find('option').remove();
+
+            var idpro = this.value;
+            var select03 = '';
+
+            var distritos_result = jQuery.grep(distritos, function (obj) {
+                return obj[idpro];
+            });
+
+            //console.log( JSON.stringify(distritos_result, null, '\t') );
+            //console.log( JSON.stringify(distritos_result[0][idpro], null, '\t') );
+
+            var distritos_result_array = distritos_result[0][idpro];
+
+            $.each(distritos_result_array, function(i, obj) {
+                select03 = '<option value="'+ distritos_result_array[i].coddistrito + '">' + distritos_result_array[i].distrito + '</option>';
+                $('#ubigeo_dis').append(select03);
+            });
+
+        });
+
+        //seleccionar por defecto LIMA
+        $('#ubigeo_dep option[value="15"]').attr("selected",true);
+        $('#ubigeo_dep').trigger('change');
+
+        //seleccionar por defecto LIMA
+        $('#ubigeo_pro option[value="1501"]').attr("selected",true);
+        $('#ubigeo_pro').trigger('change');
+
+        //seleccionar por defecto LA MOLINA
+        $('#ubigeo_dis option[value="150114"]').attr("selected",true);
+
+
+
+
+
+    });
+</script>
+{% endblock %}

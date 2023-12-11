@@ -1,0 +1,46 @@
+import pandas as pd
+import requests
+import json
+from pymongo import MongoClient
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Configuraciones de visualización
+sns.set(style="whitegrid")
+
+# Extracción de datos
+# Datos de la web
+url = "TU_URL_AQUI"  # Reemplaza con la URL de tu fuente web
+response = requests.get(url)
+web_data = pd.DataFrame(response.json())
+
+# Datos de CSV
+csv_data = pd.read_csv("ruta/a/tu/archivo.csv")
+
+# Datos de JSON
+with open('ruta/a/tu/archivo.json') as f:
+    json_data = json.load(f)
+json_df = pd.DataFrame(json_data)
+
+# Datos de la base de datos NoSQL (MongoDB)
+client = MongoClient("TU_STRING_DE_CONEXION")
+db = client.tu_base_de_datos
+collection = db.tu_coleccion
+nosql_data = pd.DataFrame(list(collection.find()))
+
+# Transformación de datos
+# Ejemplo de transformación (ajusta según tus necesidades)
+csv_data.rename(columns={'antigua_columna': 'nueva_columna'}, inplace=True)
+
+# Integración de datos
+# Asegúrate de que todas las fuentes de datos tienen columnas comunes para la integración
+data_integrada = pd.concat([web_data, csv_data, json_df, nosql_data], axis=0, join='inner')
+
+# Visualización de Datos
+# Cambia 'columna_categorica' y 'columna_numerica' según tus columnas
+plt.figure(figsize=(10, 6))
+sns.barplot(x='columna_categorica', y='columna_numerica', data=data_integrada)
+plt.title('Título del Gráfico')
+plt.xlabel('Etiqueta Eje X')
+plt.ylabel('Etiqueta Eje Y')
+plt.show()

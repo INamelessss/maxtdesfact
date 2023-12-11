@@ -1,0 +1,56 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container mt-12">
+    <div class="card">
+        <div class="card-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item active" aria-current="page">Sucursales</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between mb-3">
+                <h2>Sucursales</h2>
+                <a href="{% url 'nuevosucursal' %}"><button class="btn btn-primary">Nuevo</button></a>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <input type="text" class="form-control w-25" placeholder="Buscar">
+                <div>
+                    <select class="form-control d-inline-block w-auto">
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-border-style">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">NOMBRE</th>
+                                <th scope="col">CÓDIGO</th>
+                                <th scope="col">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sucursal in sucursales %}
+                            <tr>
+                                <td>{{ sucursal.id }}</td>
+                                <td>{{ sucursal.nombre }}</td>
+                                <td>{{ sucursal.codigo_sunat }}</td>
+                                <td><a href="{% url 'editarsucursal' sucursal.id %}">Editar</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container mt-12">
+    <div class="card">
+        <div class="card-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item">Productos</li>
+                    <li class="breadcrumb-item active" aria-current="page">Editar</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between mb-3">
+                <h2>Nuevo</h2>
+            </div>
+            <!-- Formulario de entrada -->
+            <form action="{% url 'editarproducto' producto.id %}" method="post" class="border p-4 bg-white">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <label for="codigo" class="col-sm-2 col-form-label">Código</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="codigo" name="codigo" class="form-control" readonly value="{{ producto.codigo }}">
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-primary" onclick="generarCodigo()">Generar</button>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="categoria" class="col-sm-2 col-form-label">Categoría</label>
+                    <div class="col-sm-10">
+                        <select id="categoria" name="categoria" class="form-control">
+                            <option value="" selected>Seleccione una categoría</option>
+                            {% for cat in categorias %}
+                            <option value="{{ cat.id }}" {% if producto.categoria.id == cat.id %}selected{% endif %}>{{ cat.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="unidad" class="col-sm-2 col-form-label">Unidad</label>
+                    <div class="col-sm-10">
+                        <select id="unidad" name="unidad" class="form-control">
+                            <option value="" selected>Seleccione una unidad</option>
+                            {% for uni in unidades %}
+                            <option value="{{ uni.id }}" {% if producto.unidad.id == uni.id %}selected{% endif %}>{{ uni.unidad }} {{ uni.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Descripción detallada" value="{{ producto.descripcion }}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="moneda" class="col-sm-2 col-form-label">Moneda</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="moneda" name="moneda">
+                            <!-- Opciones del segundo select -->
+                            <option value="(S/) Sol">(S/) Sol</option>
+                            <option value="($/.) Dólar EEUU">($/.) Dólar EEUU</option>
+                            <option value="(€) Euro">(€) Euro</option>
+                            <option value="(ARS) Peso Argentino">(ARS) Peso Argentino</option>
+                            <option value="(R$) Real">(R$) Real</option>
+                            <option value="(CLP) Peso Chileno">(CLP) Peso Chileno</option>
+                            <option value="(COP) Peso Colombiano">(COP) Peso Colombiano</option>
+                            <option value="(MXN) Peso Mexiano">(MXN) Peso Mexiano</option>
+                            <!-- ... agregar el resto de las opciones aquí ... -->
+                        </select>
+                    </div>
+
+                    <label for="precioVenta" class="col-sm-2 col-form-label">Precio venta</label>
+                    <div class="col-sm-4">
+                        <input type="number" id="precioVenta" name="precio_venta" class="form-control" step="0.01" value="{{ producto.precio_venta }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <textarea id="observaciones" name="observaciones" class="form-control" rows="3">{{ producto.observaciones }}</textarea>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="incluyeIGV" name="incluye_igv" {% if producto.incluye_igv %}checked{% endif %}>
+                            <label class="form-check-label" for="incluyeIGV">¿El precio incluye IGV?</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="afecto_icbper" name="afecto_icbper" {% if producto.afecto_icbper %}checked{% endif %}>
+                            <label class="form-check-label" for="afectoICBPER">¿Es Afecto al ICBPER?</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-success">Actualizar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function generarCodigo() {
+        let caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let codigo = "";
+        for (let i = 0; i < 8; i++) {
+            codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+        }
+        document.getElementById("codigo").value = codigo;
+    }
+</script>
+{% endblock %}

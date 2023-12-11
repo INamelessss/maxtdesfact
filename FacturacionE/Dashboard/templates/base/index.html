@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}<title>Facturación Electrónica Maxtdes</title>{% endblock %}
+    <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 11]>
+    	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
+    	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js' %}"></script>
+    	<![endif]-->
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="">
+    <meta name="author" content="Phoenixcoded" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- Favicon icon -->
+    <link rel="icon" href="{% static 'images/favicon.svg' %}" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script><!-- jQuery base library needed -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <!-- font css -->
+    <link rel="stylesheet" href="{% static 'fonts/font-awsome-pro/css/pro.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/feather.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome.css' %}">
+
+    <!-- vendor css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/customizer.css' %}">
+
+</head>
+
+<body class="">
+	<!-- [ Pre-loader ] start -->
+	<div class="loader-bg">
+		<div class="loader-track">
+			<div class="loader-fill"></div>
+		</div>
+	</div>
+	<!-- [ Pre-loader ] End -->
+	<!-- [ Mobile header ] start -->
+	<div class="pc-mob-header pc-header">
+		<div class="pcm-logo">
+			<img src="{% static 'images/logo.svg' %}" alt="" class="logo logo-lg">
+		</div>
+		<div class="pcm-toolbar">
+			<a href="#!" class="pc-head-link" id="mobile-collapse">
+				<div class="hamburger hamburger--arrowturn">
+					<div class="hamburger-box">
+						<div class="hamburger-inner"></div>
+					</div>
+				</div>
+				<!-- <i data-feather="menu"></i> -->
+			</a>
+			<a href="#!" class="pc-head-link" id="headerdrp-collapse">
+				<i data-feather="align-right"></i>
+			</a>
+			<a href="#!" class="pc-head-link" id="header-collapse">
+				<i data-feather="more-vertical"></i>
+			</a>
+		</div>
+	</div>
+	<!-- [ Mobile header ] End -->
+    {% block sidebar %}
+	<!-- [ navigation menu ] start -->
+	<nav class="pc-sidebar ">
+		<div class="navbar-wrapper">
+			<div class="m-header">
+				<a href="index.html" class="b-brand">
+					<!-- ========   change your logo hear   ============ -->
+					<img src="{% static 'images/logos/logo1.png' %}" class="align-self-start mr-3" alt="..." style="width: 100%;">
+				</a>
+			</div>
+			<div class="navbar-content">
+				<ul class="pc-navbar">
+					<li class="pc-item pc-caption">
+						<label>VENTAS</label>
+					</li>
+					<li class="pc-item">
+						<a href="{% url 'clientes' %}" class="pc-link "><span class="pc-micon"><i data-feather="user"></i></span><span class="pc-mtext">Clientes</span></a>
+					</li>
+                    <li class="pc-item pc-hasmenu">
+						<a href="#!" class="pc-link "><span class="pc-micon"><i data-feather="file-text"></i></span><span class="pc-mtext">Comprobantes</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
+                        <ul class="pc-submenu">
+							<li class="pc-item"><a class="pc-link" href="{% url 'comprobantes' %}"><span class="pc-micon"><i data-feather="eye"></i></span>Ver comprobantes</a></li>
+							<li class="pc-item"><a class="pc-link" href="{% url 'factura' %}"><span class="pc-micon"><i data-feather="plus"></i></span>Emitir Factura</a></li>
+							<li class="pc-item"><a class="pc-link" href="{% url 'boleta' %}"><span class="pc-micon"><i data-feather="plus"></i></span>Emitir Boleta</a></li>
+							<li class="pc-item"><a class="pc-link" href="{% url 'notacredito' %}"><span class="pc-micon"><i data-feather="plus"></i></span>Nota de crédito</a></li>
+							<li class="pc-item"><a class="pc-link" href="{% url 'notadebito' %}"><span class="pc-micon"><i data-feather="plus"></i></span>Nota de débito</a></li>
+						</ul>
+					</li>
+					<li class="pc-item pc-caption">
+						<label>BODEGA</label>
+					</li>
+                    <li class="pc-item">
+						<a href="{% url 'categorias' %}" class="pc-link "><span class="pc-micon"><i data-feather="tag"></i></span><span class="pc-mtext">Categorías</span></a>
+					</li>
+                    <li class="pc-item pc-hasmenu">
+						<a href="#!" class="pc-link "><span class="pc-micon"><i data-feather="shopping-cart"></i></span><span class="pc-mtext">Productos</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
+                        <ul class="pc-submenu">
+							<li class="pc-item"><a class="pc-link" href="{% url 'productos' %}"><span class="pc-micon"><i data-feather="eye"></i></span>Ver productos</a></li>
+							<li class="pc-item"><a class="pc-link" href="{% url 'nuevoproducto' %}"><span class="pc-micon"><i data-feather="plus"></i></span>Crear productos</a></li>
+						</ul>
+					</li>
+					<li class="pc-item pc-hasmenu">
+						<a href="#!" class="pc-link "><span class="pc-micon"><i data-feather="repeat"></i></span><span class="pc-mtext">Movimientos</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
+						<ul class="pc-submenu">
+                            <li class="pc-item"><a class="pc-link" href="{% url 'ingresos' %}"><span class="pc-micon"><i data-feather="trending-up"></i></span>Ingreso de productos</a></li>
+							<li class="pc-item"><a class="pc-link" href="{% url 'salidas' %}"><span class="pc-micon"><i data-feather="trending-down"></i></span>Salida de productos</a></li>
+						</ul>
+					</li>
+                    <li class="pc-item">
+						<a href="{% url 'stock' %}" class="pc-link "><span class="pc-micon"><i data-feather="layers"></i></span><span class="pc-mtext">Stock</span></a>
+					</li>
+					<li class="pc-item pc-caption">
+						<label>Configuración</label>
+					</li>
+                    <li class="pc-item">
+						<a href="{% url 'sucursales' %}" class="pc-link "><span class="pc-micon"><i data-feather="shopping-bag"></i></span><span class="pc-mtext">Sucursales</span></a>
+					</li>
+                    <li class="pc-item">
+						<a href="{% url 'list_users' %}" class="pc-link "><span class="pc-micon"><i data-feather="user-plus"></i></span><span class="pc-mtext">Empleados</span></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+    {% endblock %}
+	<!-- [ navigation menu ] end -->
+	<!-- [ Header ] start -->
+	<header class="pc-header ">
+		<div class="header-wrapper">
+			<div class="ml-auto">
+				<ul class="list-unstyled">
+					<li class="dropdown pc-h-item">
+						<a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+							<i data-feather="search"></i>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right pc-h-dropdown drp-search">
+							<form class="px-3">
+								<div class="form-group mb-0 d-flex align-items-center">
+									<i data-feather="search"></i>
+									<input type="search" class="form-control border-0 shadow-none" placeholder="Search here. . .">
+								</div>
+							</form>
+						</div>
+					</li>
+					<li class="dropdown pc-h-item">
+						<a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+							<img src="{% static 'images/user/avatar-2.jpg' %}" alt="user-image" class="user-avtar">
+							<span>
+								<span class="user-name">Joseph William</span>
+								<span class="user-desc">Administrator</span>
+							</span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right pc-h-dropdown">
+							<div class=" dropdown-header">
+								<h6 class="text-overflow m-0">Welcome !</h6>
+							</div>
+							<a href="#!" class="dropdown-item">
+								<i data-feather="user"></i>
+								<span>My Account</span>
+							</a>
+							<a href="#!" class="dropdown-item">
+								<i data-feather="settings"></i>
+								<span>Settings</span>
+							</a>
+							<a href="#!" class="dropdown-item">
+								<i data-feather="life-buoy"></i>
+								<span>Support</span>
+							</a>
+							<a href="#!" class="dropdown-item">
+								<i data-feather="lock"></i>
+								<span>Lock Screen</span>
+							</a>
+							<a href="#!" class="dropdown-item">
+								<i data-feather="power"></i>
+								<span>Logout</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</header>
+	<!-- [ Header ] end -->
+    <!-- [ Main Content ] start -->
+<div class="pc-container">
+    <div class="pcoded-content">
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- [ Main Content ] end -->
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+</div>
+    <!-- Warning Section start -->
+    <!-- Older IE warning message -->
+    <!--[if lt IE 11]>
+        <div class="ie-warning">
+            <h1>Warning!!</h1>
+            <p>You are using an outdated version of Internet Explorer, please upgrade
+               <br/>to any of the following web browsers to access this website.
+            </p>
+            <div class="iew-container">
+                <ul class="iew-download">
+                    <li>
+                        <a href="http://www.google.com/chrome/">
+                            <img src="{% static 'images/browser/chrome.png" alt="Chrome">
+                            <div>Chrome</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.mozilla.org/en-US/firefox/new/">
+                            <img src="{% static 'images/browser/firefox.png" alt="Firefox">
+                            <div>Firefox</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.opera.com">
+                            <img src="{% static 'images/browser/opera.png" alt="Opera">
+                            <div>Opera</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.apple.com/safari/">
+                            <img src="{% static 'images/browser/safari.png" alt="Safari">
+                            <div>Safari</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                            <img src="{% static 'images/browser/ie.png" alt="">
+                            <div>IE (11 & above)</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <p>Sorry for the inconvenience!</p>
+        </div>
+    <![endif]-->
+    <!-- Warning Section Ends -->
+    <!-- Required Js -->
+    <script src="{% static 'js/vendor-all.min.js' %}"></script>
+    <script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/plugins/feather.min.js' %}"></script>
+    <script src="{% static 'js/pcoded.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js'"></script>
+    <script src="{% static 'js/plugins/clipboard.min.js' %}"></script>
+    <script src="{% static 'js/uikit.min.js' %}"></script>
+    <script src="{% static 'ubigeo.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <!-- Development version -->
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
+    <!-- Production version -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <!-- Apex Chart -->
+    <script src="{% static 'js/plugins/apexcharts.min.js' %}"></script>
+
+<!-- custom-chart js -->
+<script src="{% static 'js/pages/dashboard-sale.js' %}"></script>
+{% block scripts %}
+
+{% endblock %}
+</body>
+
+</html>

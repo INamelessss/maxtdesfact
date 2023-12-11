@@ -1,0 +1,33 @@
+-------------Lunes-------------
+Pedir en SUNAT
+Facturación electrónica por medio de tickets
+Web
+Evitar concurrencia ( Los productos no interfieran el cálculo de una caja con otra )
+Cajas sincronizadas 
+
+Venta = Stock se actualiza
+Cuando stock llegue a 0, no se puede vender
+Mantener stock de seguridad
+
+Verdad = Stock suficiente
+Ambar = Insuficiente
+Rojo = Sin stock
+
+Mantenedor de productos
+Tabla ventas
+
+Producto - Activo o inactivo
+
+Ofertas: Foreing producto, descuento, fecha inicio, fecha final
+Usuarios - Código e información de vendedor
+
+Opcional : QR Y código de barras
+Ubicación: Sede o tienda
+
+Cada caja maneja de una serie seguido del número del comprobante
+
+Pago del POS se vea reflejado en el comprobante
+
+Nota de crédito en caso comprobante mal
+Mantenedor de administración
+Interfaz distinto

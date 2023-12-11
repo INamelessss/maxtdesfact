@@ -1,0 +1,57 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container mt-12">
+    <div class="card">
+        <div class="card-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item active" aria-current="page">Stock</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between mb-3">
+                <h2>Stock</h2>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <input type="text" class="form-control w-25" placeholder="Buscar">
+                <div>
+                    <select class="form-control d-inline-block w-auto">
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-border-style">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">SUCURSAL</th>
+                            <th scope="col">CÓDIGO</th>
+                            <th scope="col">DESCRIPCIÓN</th>
+                            <th scope="col">UNIDAD</th>
+                            <th scope="col">STOCK</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stock in stocks %}
+                        <tr>
+                            <td>{{ stock.sucursal.nombre }}</td>
+                            <td>{{ stock.producto.codigo }}</td>
+                            <td>{{ stock.producto.descripcion }}</td>
+                            <td>{{ stock.producto.unidad.unidad }}</td>
+                            <td>{{ stock.cantidad }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

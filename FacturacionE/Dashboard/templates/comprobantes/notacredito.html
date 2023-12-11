@@ -1,0 +1,279 @@
+{% extends "base/index.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-12">
+    <h2 class="mb-3">Nota de Crédito</h2>
+    <div class="card">
+        <div class="card-body">
+
+            <!-- Encabezado -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="media">
+                        <img src="{% static 'images/logos/logo2.png' %}" class="align-self-start mr-3" alt="..." style="width: 64px;">
+                        <div class="media-body">
+                            <h5 class="mt-0">Maxtdes SAC</h5>
+                            Juan de la Cierva N° 282 – Urb. Pay Pay – Trujillo – La Libertad (OFICINA CENTRAL)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <h6>R.U.C. N° 20601088143</h6>
+                    <h5>FACTURA ELECTRÓNICA</h5>
+                    <h6>F001 - 00000001</h6>
+                </div>
+            </div>
+
+            <!-- Datos del cliente -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h6>1. DATOS DEL CLIENTE</h6>
+                    <div class="form-check" style="text-align: left">
+                        <input class="form-check-input" type="checkbox" id="clienteRegistrado" onclick="toggleClienteRegistrado()">
+                        <label class="form-check-label" for="clienteRegistrado">Cliente registrado?</label>
+                    </div>
+                    <hr class="hr" />
+                    <div id="clienteDetails">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="cliente">Cliente</label>
+                                <input type="text" class="form-control" id="cliente">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="direccion">Dirección</label>
+                                <input type="text" class="form-control" id="direccion">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="moneda">Tipo de documento</label>
+                                <select class="form-control" id="moneda">
+                                    <option>Sin documento</option>
+                                    <option>DNI</option>
+                                    <option>Carnet de extranjería</option>
+                                    <option>RUC</option>
+                                    <option>Pasaporte</option>
+                                    <option>Cedula diplomática</option>
+                                    <option>TIN - Tax Identification Number</option>
+                                    <option>IN - Identification Number</option>
+                                    <option>TAM - Tarjeta Andina de Migración</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="ruc">Documento</label>
+                                <input type="text" class="form-control" id="ruc">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="clienteDropdown" style="display: none;">
+                        <label for="clientesSelect">Selecciona un cliente</label>
+                        <select class="form-control" id="clientesSelect">
+                            <option>Cliente 1</option>
+                            <option>Cliente 2</option>
+                            <!-- ... Lista de clientes ... -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos del comprobante -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h6>2. DATOS DEL COMPROBANTE</h6>
+                    <hr class="hr" />
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="moneda">Tipo doc. afectado</label>
+                            <select class="form-control" id="moneda">
+                                <!-- Opciones del segundo select -->
+                                <option>Factura</option>
+                                <option>Boleta</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="fechaEmision">F. de Emisión</label>
+                            <input type="date" class="form-control" id="fechaEmision">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="moneda">Moneda</label>
+                            <select class="form-control" id="moneda">
+                                <!-- Opciones del segundo select -->
+                                <option>(S/) Sol</option>
+                                <option>($/.) Dólar EEUU</option>
+                                <option>(€) Euro</option>
+                                <option>(ARS) Peso Argentino</option>
+                                <option>(R$) Real</option>
+                                <option>(CLP) Peso Chileno</option>
+                                <option>(COP) Peso Colombiano</option>
+                                <option>(MXN) Peso Mexiano</option>
+                                <!-- ... agregar el resto de las opciones aquí ... -->
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <select class="form-control" id="tipoVenta">
+                                <!-- Opciones del primer select -->
+                                <option>Ajustes afectos al IVAP</option>
+                                <option>Ajustes de operaciones de exportacion</option>
+                                <option>Ajustes de la operación</option>
+                                <option>Anulación de la operación</option>
+                                <option>Bonificación</option>
+                                <option>Corrección por error en la descripción</option>
+                                <option>Descuento global</option>
+                                <option>Descuento por ítem</option>
+                                <option>Devolución por ítem</option>
+                                <option>Devolución total</option>
+                                <option>Disminución en el valor</option>
+                                <option>Otros conceptos</option>
+                                <!-- ... agregar el resto de las opciones aquí ... -->
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="documentoModifica">Documento que modifica</label>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="text" class="form-control" id="serie" placeholder="Serie">
+
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="text" class="form-control" id="correlativo" placeholder="Correlativo">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                </div>
+            </div>
+
+            <!-- Sección de items -->
+            <div class="mb-4">
+                <button class="btn btn-outline-secondary btn-block" data-toggle="modal" data-target="#addItemModal">+ Agregar un item</button>
+            </div>
+
+            <!-- Modal para Agregar un item -->
+            <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addItemModalLabel">Agregar un item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="tipoAfectacion">Tipo de afectación</label>
+                        <select class="form-control" id="tipoAfectacion">
+                            <option>Gravado - Operación Onerosa</option>
+                            <!-- Agrega aquí otras opciones si es necesario -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="producto">Producto</label>
+                        <input type="text" class="form-control" id="producto" placeholder="Buscar producto por nombre o código">
+                    </div>
+                    <div class="form-group">
+                        <label for="cantidad">Cantidad</label>
+                        <input type="number" class="form-control" id="cantidad" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="porcentajeIGV">Porcentaje IGV</label>
+                        <select class="form-control" id="porcentajeIGV">
+                            <option>IGV 18%</option>
+                            <option>IGV 10%</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="descuento">Descuento (opcional)</label>
+                        <input type="number" class="form-control" id="descuento" min="1" placeholder="Opcional">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Agregar</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- Importe en letras y opciones finales -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6>IMPORTE EN LETRAS</h6>
+                    <p>CERO CON 00/100</p>
+                </div>
+                <div class="col-md-6 text-right">
+                    <!-- Aquí irían campos adicionales como IGV, Precio Venta, etc-->
+                </div>
+            </div>
+            <!-- Sección de modo de envío -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h6>SELECCIONA EL MODO DE ENVÍO:</h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="modoEnvio" id="enviarSunat" value="enviarSunat" checked>
+                    <label class="form-check-label" for="enviarSunat">
+                        Enviar a SUNAT ahora mismo
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="modoEnvio" id="firmarDigitalmente" value="firmarDigitalmente">
+                    <label class="form-check-label" for="firmarDigitalmente">
+                        Solo Firmar digitalmente
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="modoEnvio" id="guardarVenta" value="guardarVenta">
+                    <label class="form-check-label" for="guardarVenta">
+                        Solo Guardar la Venta
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón de emitir factura -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <button class="btn btn-primary btn-block">Emitir factura</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+    function toggleClienteRegistrado() {
+        const clienteRegistrado = document.getElementById('clienteRegistrado').checked;
+        const clienteDetails = document.getElementById('clienteDetails');
+        const clienteDropdown = document.getElementById('clienteDropdown');
+
+        if (clienteRegistrado) {
+            clienteDetails.style.display = 'none';
+            clienteDropdown.style.display = 'block';
+        } else {
+            clienteDetails.style.display = 'block';
+            clienteDropdown.style.display = 'none';
+        }
+    }
+
+    $(document).ready(function() {
+        $('#addItemModal .btn-primary').on('click', function() {
+            let cantidad = $('#cantidad').val();
+            let descuento = $('#descuento').val();
+
+            if (cantidad <= 0) {
+                alert('La cantidad debe ser mayor que 0');
+                return false;
+            }
+
+            if (descuento && descuento < 1) {
+                alert('El descuento debe ser mayor o igual a 1');
+                return false;
+            }
+
+            // Aquí puedes agregar la funcionalidad para agregar el ítem
+            // ...
+
+            // Cerrar el modal
+            $('#addItemModal').modal('hide');
+        });
+    });
+</script>
+{% endblock %}

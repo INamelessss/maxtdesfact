@@ -1,0 +1,34 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container mt-12">
+    <div class="card">
+        <div class="card-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item">Categorias</li>
+                    <li class="breadcrumb-item active" aria-current="page">Nuevo</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between mb-3">
+                <h2>Nuevo</h2>
+            </div>
+            <!-- Formulario de entrada -->
+            <form method="post">
+                {% csrf_token %}
+                <!-- Razón social / Nombre completo -->
+                <div class="form-group">
+                    <label for="{{ form.nombre.id_for_label }}">Nombre de la categoria</label>
+                    {{ form.nombre }}
+                </div>
+                <!-- Botón Guardar -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

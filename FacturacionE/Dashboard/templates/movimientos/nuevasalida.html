@@ -1,0 +1,161 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container mt-12">
+    <div class="card">
+        <div class="card-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="#">Salidas</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Nueva salida</li>
+                </ol>
+            </nav>
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" class="border p-4 bg-white">
+                        {% csrf_token %}
+                        <div class="form-row mb-4">
+                            <div class="col-md-6">
+                                <label for="motivo">Motivo</label>
+                                <select id="motivo" class="form-control" name="motivo">
+                                    <option value="Salida de Productos">Salida de Productos</option>
+                                    <option value="Préstamo de herramientas">Préstamo de herramientas</option>
+                                    <option value="Artículos a cargo">Artículos a cargo</option>
+                                    <option value="Mermas de producto">Mermas de producto</option>
+                                    <option value="Ajustes de inventario">Ajustes de inventario</option>
+                                    <option value="Fabricación de Productos">Fabricación de Productos</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sucursal">Sucursal</label>
+                                <select id="sucursal" class="form-control" name="sucursal">
+                                    <option value="" selected>Seleccione una sucursal</option>
+                                    {% for sucursal in sucursales %}
+                                        <option value="{{ sucursal.id }}">{{ sucursal.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row mb-4">
+                            <div class="col-md-6">
+                                <label>Requisición (Opcional)</label>
+                                <div class="input-group">
+                                    <input type="text" name="requisicion" class="form-control" placeholder="Ingrese el número de la requisición">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>O. Compra (Opcional)</label>
+                                <div class="input-group">
+                                    <input type="text" name="orden_compra" class="form-control" placeholder="Ingrese el número de la orden de compra">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row mb-4">
+                            <div class="col-md-8">
+                                <label>Buscar producto</label>
+                                <select id="categoria" name="categoria" class="form-control">
+                                    <option value="" selected>Seleccione un producto</option>
+                                    {% for producto in productos %}
+                                        <option value="{{ producto.id }}">{{ producto.descripcion }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Cantidad</label>
+                                <input type="number" name="cantidad" class="form-control" placeholder="Ingrese la cantidad">
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <button class="btn btn-primary">Agregar</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Productos agregados</label>
+                            <div class="card-body table-border-style">
+                                <div class="table-responsive">
+                                    <table class="table table-striped" id="product-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Producto</th>
+                                                <th scope="col">Cantidad</th>
+                                                <th scope="col">ACTION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Aquí se agregarán los productos -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.querySelector('.btn-primary').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const productoId = document.querySelector('#categoria').value;
+        const productoName = document.querySelector('#categoria').selectedOptions[0].textContent;
+        const cantidad = document.querySelector('input[name="cantidad"]').value;
+
+        if(productoId && cantidad) {
+            const tbody = document.querySelector('#product-table tbody');
+
+            // Crear una nueva fila
+            const newRow = document.createElement('tr');
+
+            // Crear las columnas
+            const productColumn = document.createElement('td');
+            productColumn.textContent = productoName;
+
+            const qtyColumn = document.createElement('td');
+            qtyColumn.textContent = cantidad;
+
+            const actionColumn = document.createElement('td');
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Eliminar';
+            deleteButton.classList.add('btn', 'btn-danger');
+            deleteButton.addEventListener('click', function() {
+                tbody.removeChild(newRow);
+            });
+            actionColumn.appendChild(deleteButton);
+
+            // Agregar campos ocultos para enviar al servidor
+            const productInput = document.createElement('input');
+            productInput.type = 'hidden';
+            productInput.name = 'producto';
+            productInput.value = productoId;
+
+            const qtyInput = document.createElement('input');
+            qtyInput.type = 'hidden';
+            qtyInput.name = 'cantidad';
+            qtyInput.value = cantidad;
+
+            newRow.appendChild(productInput);
+            newRow.appendChild(qtyInput);
+
+            // Agregar las columnas a la fila
+            newRow.appendChild(productColumn);
+            newRow.appendChild(qtyColumn);
+            newRow.appendChild(actionColumn);
+
+            // Agregar la fila a la tabla
+            tbody.appendChild(newRow);
+        }
+    });
+</script>
+{% endblock%}

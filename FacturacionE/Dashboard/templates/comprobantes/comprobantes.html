@@ -1,0 +1,66 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="container mt-12">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="card">
+        <div class="card-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item active" aria-current="page">Comprobantes</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between mb-3">
+                <h2>Comprobantes</h2>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <input type="text" class="form-control w-25" placeholder="Buscar">
+                <div>
+                    <select class="form-control d-inline-block w-auto">
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-border-style">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Comproante</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">PDF</th>
+                            <th scope="col">XML</th>
+                            <th scope="col">SUNAT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for documento in documentos %}
+                        <tr>
+                            <td>{{ documento.fecha }}</td>
+                            <td>{{ documento.comprobante }}</td>
+                            <td>{{ documento.cliente }}</td>
+                            <td><a href="{% url 'descargar_pdf' codigo=documento.comprobante %}" class="btn btn-success">Descargar</a></td>
+                            <td><a href="{% url 'descargar_xml' codigo=documento.comprobante %}" class="btn btn-success">Descargar</a></td>
+                            <td><a href="" class="btn btn-success">Enviar</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
