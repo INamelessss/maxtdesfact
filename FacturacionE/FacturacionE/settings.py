@@ -78,14 +78,13 @@ WSGI_APPLICATION = 'FacturacionE.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'facturaE',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': 3306,
+        'NAME': 'alejanessen$default',  # Usa el nombre de tu base de datos en PythonAnywhere.
+        'USER': 'alejanessen',  # Tu nombre de usuario en PythonAnywhere.
+        'PASSWORD': '33eeopLlol',  # La contraseña que estableciste para tu base de datos MySQL.
+        'HOST': 'alejanessen.mysql.pythonanywhere-services.com',  # El host que PythonAnywhere te proporciona.
+        'PORT': '3306',  # El puerto por defecto para MySQL.
     }
 }
-
 
 
 # Password validation
